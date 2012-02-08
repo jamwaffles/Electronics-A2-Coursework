@@ -26,7 +26,7 @@ void init() {
 	PORTC = 0x00;
 }
 
-uint8_t input() {
+uint8_t readToggleInputs() {
 	uint8_t result = 0;
 
 	writeBit(&result, 0, readBit(PINC, PC2));
@@ -37,8 +37,19 @@ uint8_t input() {
 	return result;
 }
 
+uint8_t readIncrementInputs() {
+	uint8_t result = 0;
+
+	writeBit(&result, 0, readBit(PIND, PD3));
+	writeBit(&result, 1, readBit(PIND, PD4));
+	writeBit(&result, 2, readBit(PIND, PD5));
+	writeBit(&result, 3, readBit(PIND, PD6));
+
+	return result;
+}
+
 // This works, stop fucking about with it
-void output(uint8_t value) {
+void debugOut(uint8_t value) {
 	uint8_t mask = 0b11110000;
 
 	value <<= 4;
@@ -50,6 +61,8 @@ int main(void) {
 	init();
 
 	while(1) {
-		output(input());
+		//debugOut(readToggleInputs());
+
+		debugOut(readIncrementInputs());
 	}
 }

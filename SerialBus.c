@@ -12,6 +12,7 @@ int main(void) {
 	init();
 
 	while(1) {
-
+		PORTB++;
+		_delay_ms(10);
 	}
 }

@@ -1,8 +1,8 @@
 DEVICE  = atmega32u2
 CLOCK = 16000000
 PROGRAMMER = -c usbasp
-OBJECTS = ADC.o
-PROJECT_NAME = ADC
+OBJECTS = SerialBus.o
+PROJECT_NAME = SerialBus
 
 # Remove clock divider, set external crystal, enable clock output
 FUSES = -U lfuse:w:0xbf:m -U hfuse:w:0xd9:m

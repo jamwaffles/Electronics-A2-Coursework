@@ -2,11 +2,14 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 #define OUT_PORT	PORTB
 #define CLOCK 		PB5		// PB5: Clock (white)
 #define	DATA 		PB6		// PB6: Data (green)
 #define	RESET 		PB7		// PB7:	Reset (orange)
+
+#define DEBUG_BIT	PC5
 
 inline uint8_t readBit(volatile uint8_t port, uint8_t pin) {
 	return ((port >> pin) & 1);
@@ -25,10 +28,20 @@ void init() {
 	PORTB = 0x00;
 
 	DDRD = 0x00;
-	DDRC = 0x00;
+	DDRC = 0b00100000;
 
 	PORTD = 0x00;
 	PORTC = 0x00;
+
+	// Timer 0 setup, prescaler (1/64)
+	TCCR0B |= (1 << CS00);
+	TCCR0B |= (1 << CS02);
+
+	// Enable timer 0 interrupt
+	TIMSK0 |= (1 << TOIE0);
+
+	// Enable Global Interrupts
+	sei();
 }
 
 uint8_t readToggleInputs() {
@@ -78,6 +91,11 @@ void debugOut(uint8_t value) {
 	PORTB = (PORTB & ~mask) | (value & mask);
 }
 
+ISR(TIMER0_OVF_vect)
+{
+	writeBit(&PORTC, DEBUG_BIT, !readBit(PORTC, DEBUG_BIT));
+}
+
 int main(void) {
 	init();
 
@@ -93,6 +111,6 @@ int main(void) {
 
 		shiftIn(readIncrementInputs(), 4);
 
-		_delay_ms(2);
+		_delay_ms(1);
 	}
 }

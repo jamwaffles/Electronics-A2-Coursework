@@ -35,9 +35,9 @@ uint8_t readToggleInputs() {
 	uint8_t result = 0;
 
 	writeBit(&result, 0, readBit(PINC, PC2));
-	writeBit(&result, 1, readBit(PIND, PD0));
+	writeBit(&result, 3, readBit(PIND, PD0));
 	writeBit(&result, 2, readBit(PIND, PD1));
-	writeBit(&result, 3, readBit(PIND, PD2));
+	writeBit(&result, 1, readBit(PIND, PD2));
 
 	return result;
 }
@@ -82,8 +82,9 @@ int main(void) {
 	init();
 
 	shiftIn(0xff, 8);
-	_delay_ms(30);
+	_delay_ms(100);
 	resetShift();
+	_delay_ms(50);
 
 	while(1) {
 		resetShift();
@@ -92,6 +93,6 @@ int main(void) {
 
 		shiftIn(readIncrementInputs(), 4);
 
-		_delay_ms(5);
+		_delay_ms(2);
 	}
 }

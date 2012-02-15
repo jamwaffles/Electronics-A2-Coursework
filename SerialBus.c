@@ -35,9 +35,6 @@ void init() {
 	PORTD = 0x00;
 	PORTC = 0x00;
 
-	PORTC = 0xff;
-	while(1);
-
 	// Timer 0 setup, prescaler (1/64)
 	TCCR0B |= (1 << CS00);
 	TCCR0B |= (1 << CS02);

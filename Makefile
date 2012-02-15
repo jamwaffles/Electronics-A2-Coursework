@@ -5,10 +5,10 @@ OBJECTS = SerialBus.o
 PROJECT_NAME = SerialBus
 
 # From http://www.engbedded.com/fusecalc/
-FUSES = -U lfuse:w:0x9e:m -U hfuse:w:0xd8:m -U efuse:w:0xf4:m -u
+FUSES = -U lfuse:w:0x9e:m -U hfuse:w:0xd9:m -U efuse:w:0xf4:m
 
 #AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE)
-AVRDUDE = avrdude $(PROGRAMMER) -p usb162 -F
+AVRDUDE = avrdude $(PROGRAMMER) -p m32u2 -F
 COMPILE = avr-gcc -std=gnu99 -g -Wall -Winline -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 LINK_FLAGS = -lc -lm

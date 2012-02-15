@@ -24,6 +24,8 @@ inline void writeBit(volatile uint8_t *port, uint8_t pin, uint8_t value) {
 }
 
 void init() {
+	CLKPR = 0x00;		// No clock prescaler
+
 	DDRB = 0xff;
 	PORTB = 0x00;
 
@@ -32,6 +34,9 @@ void init() {
 
 	PORTD = 0x00;
 	PORTC = 0x00;
+
+	PORTC = 0xff;
+	while(1);
 
 	// Timer 0 setup, prescaler (1/64)
 	TCCR0B |= (1 << CS00);
@@ -68,7 +73,9 @@ uint8_t readIncrementInputs() {
 
 void resetShift() {
 	writeBit(&OUT_PORT, RESET, 1);
+	_delay_ms(10);
 	writeBit(&OUT_PORT, RESET, 0);
+	_delay_ms(10);
 }
 
 void shiftIn(uint8_t data, uint8_t number) {
@@ -76,9 +83,12 @@ void shiftIn(uint8_t data, uint8_t number) {
 
 	for(i = 0; i < number; i++) {
 		writeBit(&OUT_PORT, DATA, readBit(data, i));
+		_delay_ms(10);
 
 		writeBit(&OUT_PORT, CLOCK, 1);
+		_delay_ms(5);
 		writeBit(&OUT_PORT, CLOCK, 0);
+		_delay_ms(5);
 	}
 }
 
@@ -99,18 +109,18 @@ ISR(TIMER0_OVF_vect)
 int main(void) {
 	init();
 
-	shiftIn(0xff, 8);
+	/*shiftIn(0xff, 8);
 	_delay_ms(100);
 	resetShift();
-	_delay_ms(50);
+	_delay_ms(50);*/
 
 	while(1) {
-		resetShift();
+		/*resetShift();
 
 		shiftIn(readToggleInputs(), 4);
 
 		shiftIn(readIncrementInputs(), 4);
 
-		_delay_ms(1);
+		//_delay_ms(10);*/
 	}
 }
